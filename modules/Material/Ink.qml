@@ -195,7 +195,7 @@ MouseArea {
                         id: fillSizeAnimation
                         running: true
 
-                        target: circleRectangle; property: "radius"; duration: 500;
+                        target: circleRectangle; property: "radius"; duration: 300;
                         from: startRadius; to: endRadius; easing.type: Easing.InOutQuad
 
                         onStopped: {
@@ -208,7 +208,7 @@ MouseArea {
                         id: fillOpacityAnimation
                         running: true
 
-                        target: circleRectangle; property: "opacity"; duration: 300;
+                        target: circleRectangle; property: "opacity"; duration: 100;
                         from: 0; to: 1; easing.type: Easing.InOutQuad
                     }
 
@@ -223,7 +223,7 @@ MouseArea {
                         id: closeAnimation
 
                         NumberAnimation {
-                            target: circleRectangle; property: "opacity"; duration: 250;
+                            target: circleRectangle; property: "opacity"; duration: 100;
                             to: 1; easing.type: Easing.InOutQuad
                         }
 
