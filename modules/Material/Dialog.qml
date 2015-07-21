@@ -253,7 +253,7 @@ PopupBase {
             View {
                 id: buttonView
 
-                height: hasActions ? positiveButton.implicitHeight + Units.dp(8) : 0
+                height: hasActions ? positiveButton.implicitHeight + Units.dp(15) : 0
                 visible: hasActions
 
                 backgroundColor: floatingActions ? "transparent" : "white"
@@ -273,6 +273,9 @@ PopupBase {
                     text: negativeButtonText
                     textColor: Theme.accentColor
                     context: "dialog"
+                    elevation: 1
+                    implicitHeight: Units.dp(50)
+                    implicitWidth: Units.dp(100)
 
                     anchors {
                         top: parent.top
@@ -293,6 +296,9 @@ PopupBase {
                     text: positiveButtonText
                     textColor: Theme.accentColor
                     context: "dialog"
+                    elevation: 1
+                    implicitHeight: Units.dp(50)
+                    implicitWidth: Units.dp(100)
 
                     anchors {
                         top: parent.top

@@ -173,13 +173,13 @@ Item {
         })
     }
 
-    IconButton {
+    CubicIconButton {
         id: leftItem
 
         anchors {
             verticalCenter: actionsRow.verticalCenter
             left: parent.left
-            leftMargin: leftItem.show ? Units.dp(16) : -leftItem.width
+            leftMargin: leftItem.show ? Units.dp(5) : -leftItem.width
 
             Behavior on leftMargin {
                 NumberAnimation { duration: 200 }
@@ -189,6 +189,8 @@ Item {
         color: Theme.lightDark(actionBar.backgroundColor, Theme.light.iconColor,
                                                             Theme.dark.iconColor)
         size: Units.dp(24)
+        width: actionBar.height
+        height: actionBar.height
         action: backAction
 
         opacity: show ? enabled ? 1 : 0.6 : 0
