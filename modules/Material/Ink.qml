@@ -57,7 +57,8 @@ MouseArea {
     }
 
     onReleased: {
-        currentCircle.removeCircle();
+        if (currentCircle)
+            currentCircle.removeCircle();
     }
 
     function createTapCircle(x, y) {

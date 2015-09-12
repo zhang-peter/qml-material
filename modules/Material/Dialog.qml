@@ -271,11 +271,12 @@ PopupBase {
                     id: negativeButton
 
                     text: negativeButtonText
-                    textColor: Theme.accentColor
+                    textColor: Theme.lightDark(backgroundColor, Theme.light.textColor,
+                                               Theme.dark.textColor)
+                    backgroundColor: Theme.primaryColor
                     context: "dialog"
-                    elevation: 1
-                    implicitHeight: Units.dp(50)
-                    implicitWidth: Units.dp(100)
+                    implicitHeight: Units.dp(40)
+                    implicitWidth: Units.dp(80)
 
                     anchors {
                         top: parent.top
@@ -294,11 +295,12 @@ PopupBase {
                     id: positiveButton
 
                     text: positiveButtonText
-                    textColor: Theme.accentColor
+                    textColor: Theme.lightDark(backgroundColor, Theme.light.textColor,
+                                               Theme.dark.textColor)
+                    backgroundColor: Theme.primaryColor
                     context: "dialog"
-                    elevation: 1
-                    implicitHeight: Units.dp(50)
-                    implicitWidth: Units.dp(100)
+                    implicitHeight: Units.dp(40)
+                    implicitWidth: Units.dp(80)
 
                     anchors {
                         top: parent.top
