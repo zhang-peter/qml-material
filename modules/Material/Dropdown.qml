@@ -80,6 +80,8 @@ PopupBase {
 
         dropdown.x += offsetX
         dropdown.y += offsetY
+        if (dropdown.x < 0) dropdown.x = 0
+        if (dropdown.y < 0) dropdown.y = 0
 
         showing = true
         parent.currentOverlay = dropdown
