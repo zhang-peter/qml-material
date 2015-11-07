@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.0
+import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import Material 0.1
 import Material.Extras 0.1
@@ -42,15 +42,13 @@ PopupBase {
                     content.contentWidth + 2 * contentMargins)
 
     height: Math.min(parent.height - Units.dp(64),
-                     headerView.height + (contentMargins * 2) +
+                     headerView.height +
                      content.contentHeight +
-                     content.topMargin +
-                     content.bottomMargin +
                      (floatingActions ? 0 : buttonContainer.height))
 
-    property int contentMargins: Units.dp(16)
+    property int contentMargins: Units.dp(24)
 
-    property int minimumWidth: Units.dp(270)
+    property int minimumWidth: Device.isMobile ? Units.dp(280) : Units.dp(300)
 
     property alias title: titleLabel.text
     property alias text: textLabel.text
@@ -125,6 +123,7 @@ PopupBase {
         anchors.fill: parent
         elevation: 5
         radius: Units.dp(2)
+        backgroundColor: "white"
 
         MouseArea {
             anchors.fill: parent
@@ -132,67 +131,6 @@ PopupBase {
 
             onClicked: {
                 mouse.accepted = false
-            }
-        }
-
-        Item {
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-                topMargin: Units.dp(8)
-            }
-
-            clip: true
-            height: headerView.height + Units.dp(32)
-
-            View {
-                backgroundColor: "white"
-                elevation: content.atYBeginning ? 0 : 1
-                fullWidth: true
-
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    top: parent.top
-                }
-
-                height: headerView.height + Units.dp(16)
-            }
-        }
-
-
-        Column {
-            id: headerView
-
-            spacing: Units.dp(16)
-
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-
-                leftMargin: Units.dp(16)
-                rightMargin: Units.dp(16)
-                topMargin: title == "" && text == "" ? 0 : Units.dp(16)
-            }
-
-            Label {
-                id: titleLabel
-
-                width: parent.width
-                wrapMode: Text.Wrap
-                style: "title"
-                visible: title != ""
-            }
-
-            Label {
-                id: textLabel
-
-                width: parent.width
-                wrapMode: Text.Wrap
-                style: "dialog"
-                visible: text != ""
             }
         }
 
@@ -204,32 +142,37 @@ PopupBase {
             id: content
 
             contentWidth: column.implicitWidth
-            contentHeight: column.height
+            contentHeight: column.height + (column.height > 0 ? contentMargins : 0)
             clip: true
 
             anchors {
                 left: parent.left
                 right: parent.right
                 top: headerView.bottom
-                topMargin: title == "" && text == "" ? 0 :Units.dp(8)
-                bottomMargin: Units.dp(-8)
                 bottom: floatingActions ? parent.bottom : buttonContainer.top
             }
 
-            interactive: contentHeight + Units.dp(8) > height
-            bottomMargin: hasActions  || contentMargins == 0 ? 0 : Units.dp(8)
+            interactive: contentHeight > height
 
-            Rectangle {
-                Column {
-                    id: column
-                    anchors {
-                        left: parent.left
-                        margins: contentMargins
-                    }
+            onContentXChanged: {
+                if(contentX != 0 && contentWidth <= width)
+                    contentX = 0
+            }
 
-                    width: content.width - 2 * contentMargins
-                    spacing: Units.dp(16)
+            onContentYChanged: {
+                if(contentY != 0 && contentHeight <= height)
+                    contentY = 0
+            }
+
+            Column {
+                id: column
+                anchors {
+                    left: parent.left
+                    leftMargin: contentMargins
                 }
+
+                width: content.width - 2 * contentMargins
+                spacing: Units.dp(8)
             }
         }
 
@@ -238,17 +181,93 @@ PopupBase {
         }
 
         Item {
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+            }
+
+            height: headerView.height
+
+            View {
+                backgroundColor: "white"
+                elevation: content.atYBeginning ? 0 : 1
+                fullWidth: true
+                radius: dialogContainer.radius
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    top: parent.top
+                }
+
+                height: parent.height
+            }
+        }
+
+
+        Column {
+            id: headerView
+
+            spacing: 0
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+
+                leftMargin: contentMargins
+                rightMargin: contentMargins
+            }
+
+            Item {
+                width: parent.width
+                height: contentMargins
+                visible: titleLabel.visible || textLabel.visible
+            }
+
+            Label {
+                id: titleLabel
+
+                width: parent.width
+                wrapMode: Text.Wrap
+                style: "title"
+                visible: title != ""
+            }
+
+            Item {
+                width: parent.width
+                height: Units.dp(20)
+                visible: titleLabel.visible
+            }
+
+            Label {
+                id: textLabel
+
+                width: parent.width
+                wrapMode: Text.Wrap
+                style: "dialog"
+                color: Theme.light.subTextColor
+                visible: text != ""
+            }
+
+            Item {
+                width: parent.width
+                height: contentMargins
+                visible: textLabel.visible
+            }
+        }
+
+        Item {
             id: buttonContainer
 
             anchors {
-                bottomMargin: Units.dp(8)
                 bottom: parent.bottom
                 right: parent.right
                 left: parent.left
             }
 
-            height: hasActions ? buttonView.height + Units.dp(8) : 0
-            clip: true
+            height: hasActions ? Units.dp(52) : Units.dp(2)
 
             View {
                 id: buttonView
@@ -259,6 +278,7 @@ PopupBase {
                 backgroundColor: floatingActions ? "transparent" : "white"
                 elevation: content.atYEnd ? 0 : 1
                 fullWidth: true
+                radius: dialogContainer.radius
                 elevationInverted: true
 
                 anchors {
@@ -270,6 +290,7 @@ PopupBase {
                 Button {
                     id: negativeButton
 
+                    visible: hasActions
                     text: negativeButtonText
                     textColor: Theme.lightDark(backgroundColor, Theme.light.textColor,
                                                Theme.dark.textColor)
@@ -279,10 +300,9 @@ PopupBase {
                     implicitWidth: Units.dp(80)
 
                     anchors {
-                        top: parent.top
+                        verticalCenter: parent.verticalCenter
                         right: positiveButton.visible ? positiveButton.left : parent.right
-                        topMargin: Units.dp(8)
-                        rightMargin: positiveButton.visible ? Units.dp(8) : Units.dp(16)
+                        rightMargin: Units.dp(8)
                     }
 
                     onClicked: {
@@ -294,6 +314,7 @@ PopupBase {
                 Button {
                     id: positiveButton
 
+                    visible: hasActions
                     text: positiveButtonText
                     textColor: Theme.lightDark(backgroundColor, Theme.light.textColor,
                                                Theme.dark.textColor)
@@ -303,9 +324,8 @@ PopupBase {
                     implicitWidth: Units.dp(80)
 
                     anchors {
-                        top: parent.top
-                        topMargin: Units.dp(8)
-                        rightMargin: Units.dp(16)
+                        verticalCenter: parent.verticalCenter
+                        rightMargin: Units.dp(8)
                         right: parent.right
                     }
 
