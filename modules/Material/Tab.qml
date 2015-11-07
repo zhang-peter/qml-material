@@ -16,36 +16,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.4
-import Material 0.1
+import QtQuick.Controls 1.3 as Controls
 
 /*!
-   \qmltype InputDialog
+   \qmltype Tab
    \inqmlmodule Material 0.1
 
-   \brief A dialog with a single text field input.
+   \brief Tab represents the content of a tab in a TabView.
+
+   This extends the QtQuick.Controls Tab component to add iconName and iconSource properties.
  */
-Dialog {
-    id: inputDialog
-    
-    hasActions: true
+Controls.Tab {
+	
+	/*!
+       The icon displayed for the action. This can be a Material Design icon or an icon from
+       FontAwesome. See \l Icon from more details.
+     */
+	property string iconName
 
-    positiveButtonEnabled: textField.acceptableInput
+	/*!
+       A URL pointing to an image to display as the icon. By default, this is
+       a special URL representing the icon named by \l iconName from the Material Design
+       icon collection or FontAwesome. The icon will be colorized using the specificed \l color,
+       unless you put ".color." in the filename, for example, "app-icon.color.svg".
 
-    property alias textField: textField
-
-    property alias validator: textField.validator
-    property alias inputMask: textField.inputMask
-    property alias inputMethodHints: textField.inputMethodHints
-    
-    property alias placeholderText: textField.placeholderText
-    property alias value: textField.text
-
-    TextField {
-        id: textField
-
-        anchors {
-            left: parent.left
-            right: parent.right
-        }
-    }
+       \sa iconName
+       \sa Icon
+     */
+    property string iconSource: "icon://" + iconName
 }
+
